@@ -6,7 +6,7 @@ import org.jbox2d.common.Vec2;
 import javax.swing.JFrame;
 
 /**
- * Milestone 1 Plane Game
+ * Milestone 1 Plane Game (based on the starter template)
  */
 public class Game {
 
@@ -74,6 +74,7 @@ public class Game {
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
+
         // --- Controls ---
         frame.addKeyListener(new PlaneController(plane));
 
@@ -81,7 +82,7 @@ public class Game {
         world.start();
     }
 
-
+    // helper to make buildings quickly (StaticBodies)
     private void makeBuilding(World world, Vec2 pos, float halfW, float halfH) {
         Shape s = new BoxShape(halfW, halfH);
         StaticBody building = new StaticBody(world, s);
