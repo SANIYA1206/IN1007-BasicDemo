@@ -1,46 +1,48 @@
 package game;
 
-import city.cs.engine.DynamicBody;
+import city.cs.engine.*;
 import org.jbox2d.common.Vec2;
 
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class PlaneController implements KeyListener {
+public class PlaneController extends KeyAdapter {
 
-    private final DynamicBody plane;
-    private float speed = 4f;
+    private DynamicBody plane;
+    private float speed = 6f;
 
     public PlaneController(DynamicBody plane) {
         this.plane = plane;
-        plane.setLinearVelocity(new Vec2(speed, 0));
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         Vec2 v = plane.getLinearVelocity();
 
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            plane.setLinearVelocity(new Vec2(speed, 6));
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            plane.setLinearVelocity(new Vec2(speed, -6));
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            speed = Math.min(10f, speed + 1f);
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             plane.setLinearVelocity(new Vec2(speed, v.y));
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            speed = Math.max(2f, speed - 1f);
-            plane.setLinearVelocity(new Vec2(speed, v.y));
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            plane.setLinearVelocity(new Vec2(-speed, v.y));
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_UP) {
+            plane.setLinearVelocity(new Vec2(v.x, speed));
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            plane.setLinearVelocity(new Vec2(v.x, -speed));
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // go level when releasing up/down
+        Vec2 v = plane.getLinearVelocity();
+
+        if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            plane.setLinearVelocity(new Vec2(0, v.y));
+        }
+
         if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
-            plane.setLinearVelocity(new Vec2(speed, 0));
+            plane.setLinearVelocity(new Vec2(v.x, 0));
         }
     }
-
-    @Override
-    public void keyTyped(KeyEvent e) { }
 }
