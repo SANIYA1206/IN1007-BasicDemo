@@ -2,38 +2,32 @@ package game;
 
 import city.cs.engine.CollisionEvent;
 import city.cs.engine.CollisionListener;
-import city.cs.engine.DynamicBody;
 import org.jbox2d.common.Vec2;
 
 public class PlaneCollision implements CollisionListener {
 
-    private final DynamicBody plane;
-
-    public PlaneCollision(DynamicBody plane) {
-        this.plane = plane;
-    }
-
     @Override
     public void collide(CollisionEvent e) {
 
-        if (e.getOtherBody() instanceof Ring) {
-            e.getOtherBody().destroy();
-            Game.score += 1;
+        // Hit a ring = score
+        if (e.getOtherBody() instanceof Ring ring) {
+            Game.score++;
+            ring.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
             return;
         }
 
-        if (e.getOtherBody() instanceof Bird) {
-            e.getOtherBody().destroy();
-            Game.lives -= 1;
+        // Hit a bird = lose life EVERY time
+        if (e.getOtherBody() instanceof Bird bird) {
 
-            // respawn
-            plane.setLinearVelocity(new Vec2(0, 0));
-            plane.setAngularVelocity(0);
-            plane.setPosition(new Vec2(-7, 5));
+            Game.lives--;
+
+            // Move bird away so collision doesn't repeat instantly
+            bird.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
+            bird.setLinearVelocity(new Vec2(-Game.SCROLL_SPEED, 0));
 
             if (Game.lives <= 0) {
-                Game.lives = 3;
-                Game.score = 0;
+                System.out.println("GAME OVER");
+                e.getReportingBody().getWorld().stop();
             }
         }
     }
