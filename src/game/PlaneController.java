@@ -1,6 +1,5 @@
 package game;
 
-import city.cs.engine.*;
 import org.jbox2d.common.Vec2;
 
 import java.awt.event.KeyAdapter;
@@ -8,41 +7,52 @@ import java.awt.event.KeyEvent;
 
 public class PlaneController extends KeyAdapter {
 
-    private DynamicBody plane;
-    private float speed = 6f;
+    private final Plane plane;
 
-    public PlaneController(DynamicBody plane) {
+    private final float forwardSpeed = 4f;  // normal speed
+    private final float backSpeed = -4f;    // when holding back
+    private final float verticalSpeed = 6f;
+
+    private boolean upHeld = false;
+    private boolean downHeld = false;
+    private boolean backHeld = false;
+
+    public PlaneController(Plane plane) {
         this.plane = plane;
+    }
+
+    private void updateVelocity() {
+        float x = backHeld ? backSpeed : forwardSpeed;
+
+        float y = 0f;
+        if (upHeld && !downHeld) y = verticalSpeed;
+        if (downHeld && !upHeld) y = -verticalSpeed;
+
+        plane.setLinearVelocity(new Vec2(x, y));
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Vec2 v = plane.getLinearVelocity();
+        int code = e.getKeyCode();
 
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            plane.setLinearVelocity(new Vec2(speed, v.y));
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            plane.setLinearVelocity(new Vec2(-speed, v.y));
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_UP) {
-            plane.setLinearVelocity(new Vec2(v.x, speed));
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            plane.setLinearVelocity(new Vec2(v.x, -speed));
-        }
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) upHeld = true;
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) downHeld = true;
+
+        // BACK button (choose what you use)
+        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) backHeld = true;
+
+        updateVelocity();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Vec2 v = plane.getLinearVelocity();
+        int code = e.getKeyCode();
 
-        if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            plane.setLinearVelocity(new Vec2(0, v.y));
-        }
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) upHeld = false;
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) downHeld = false;
 
-        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
-            plane.setLinearVelocity(new Vec2(v.x, 0));
-        }
+        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) backHeld = false;
+
+        updateVelocity();
     }
 }
