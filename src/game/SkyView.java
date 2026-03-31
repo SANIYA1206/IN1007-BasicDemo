@@ -9,12 +9,18 @@ import java.awt.*;
 public class SkyView extends UserView {
 
     private Image background;
+    private final Game game;
 
-    public SkyView(World world, int width, int height) {
+    public SkyView(World world, int width, int height, Game game) {
         super(world, width, height);
+        this.game = game;
 
-        // Load background image
-        background = new ImageIcon("data/sky.png").getImage();
+        // default background
+        updateBackground("data/sky.png");
+    }
+
+    public void updateBackground(String file) {
+        background = new ImageIcon(file).getImage();
     }
 
     @Override
@@ -27,13 +33,14 @@ public class SkyView extends UserView {
     @Override
     protected void paintForeground(Graphics2D g) {
         g.setFont(new Font("Arial", Font.BOLD, 16));
+        g.setColor(Color.WHITE);
 
-        // HUD text
         g.drawString("Score: " + Game.score, 15, 20);
         g.drawString("Lives: " + Game.lives, 15, 40);
+        g.drawString("Level: " + game.getLevelNumber(), 15, 60);
+        g.drawString("Time: " + game.getTime(), 15, 80);
 
-        // Optional: instructions
         g.setFont(new Font("Arial", Font.PLAIN, 12));
-        g.drawString("Controls: W/UP = up, S/DOWN = down", 15, 60);
+        g.drawString("Controls: W/UP = up, S/DOWN = down", 15, 100);
     }
 }
