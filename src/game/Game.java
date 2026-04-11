@@ -27,10 +27,10 @@ public class Game {
 
     public Game() {
 
-        // ✅ START AT LEVEL 1
         level = new Level1(this);
 
         view = new SkyView(level, 800, 500, this);
+        view.updateBackground(level.getBackgroundFile());
 
         frame = new JFrame("Flappy Plane");
         frame.add(view);
@@ -44,7 +44,6 @@ public class Game {
 
         level.start();
 
-        // ✅ TIMER FOR HUD (time display)
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -55,17 +54,21 @@ public class Game {
         timer.start();
     }
 
-    // ✅ LEVEL SWITCHING
     public void goNextLevel() {
         GameLevel next = level.getNextLevel();
 
         if (next == null) {
-            JOptionPane.showMessageDialog(frame, "YOU WIN!");
+            JOptionPane.showMessageDialog(frame,
+                    "YOU WIN!\n\nFinal Score: " + Game.score +
+                            "\nTime: " + time + " seconds");
             System.exit(0);
         }
 
         level.stop();
-        frame.removeKeyListener(frame.getKeyListeners()[0]);
+
+        if (frame.getKeyListeners().length > 0) {
+            frame.removeKeyListener(frame.getKeyListeners()[0]);
+        }
 
         level = next;
 
@@ -78,9 +81,10 @@ public class Game {
         view.repaint();
     }
 
-    // ✅ GAME OVER
     public void showGameOver() {
-        JOptionPane.showMessageDialog(frame, "GAME OVER");
+        JOptionPane.showMessageDialog(frame,
+                "GAME OVER\n\nScore: " + Game.score +
+                        "\nTime: " + time + " seconds");
         System.exit(0);
     }
 
@@ -92,7 +96,6 @@ public class Game {
         return time;
     }
 
-    // ✅ RANDOM HEIGHT FOR OBJECTS
     public static float randomY() {
         return MIN_Y + RNG.nextFloat() * (MAX_Y - MIN_Y);
     }
