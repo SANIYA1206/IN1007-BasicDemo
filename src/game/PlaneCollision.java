@@ -4,9 +4,6 @@ import city.cs.engine.CollisionEvent;
 import city.cs.engine.CollisionListener;
 import org.jbox2d.common.Vec2;
 
-/**
- * Handles all collisions involving the player's plane.
- */
 public class PlaneCollision implements CollisionListener {
 
     private final Game game;
@@ -20,22 +17,15 @@ public class PlaneCollision implements CollisionListener {
     @Override
     public void collide(CollisionEvent e) {
 
-        // ---------------------------
-        // Collect Ring → Increase Score
-        // ---------------------------
+        // Collect ring
         if (e.getOtherBody() instanceof Ring ring) {
             Game.score++;
             ring.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
-            return; // Prevent multiple actions in one collision
         }
 
-        // ---------------------------
-        // Hit Bird → Lose Life
-        // ---------------------------
+        // Hit bird
         if (e.getOtherBody() instanceof Bird bird) {
             Game.lives--;
-
-            // Move bird away to avoid repeated collisions
             bird.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
             bird.setLinearVelocity(new Vec2(-Game.SCROLL_SPEED, 0));
 
@@ -45,12 +35,9 @@ public class PlaneCollision implements CollisionListener {
             }
         }
 
-        // ---------------------------
-        // Hit Spike → Lose Life
-        // ---------------------------
+        // Hit spike
         if (e.getOtherBody() instanceof Spike spike) {
             Game.lives--;
-
             spike.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
             spike.setLinearVelocity(new Vec2(-Game.SCROLL_SPEED, 0));
 
@@ -60,11 +47,11 @@ public class PlaneCollision implements CollisionListener {
             }
         }
 
-        // ---------------------------
-        // Hit Laser Barrier → Lose Life
-        // ---------------------------
-        if (e.getOtherBody() instanceof LaserBarrier) {
+        // Hit horizontal laser
+        if (e.getOtherBody() instanceof LaserBarrier laser) {
             Game.lives--;
+            laser.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
+            laser.setLinearVelocity(new Vec2(-Game.SCROLL_SPEED, 0));
 
             if (Game.lives <= 0) {
                 game.showGameOver();
@@ -72,9 +59,7 @@ public class PlaneCollision implements CollisionListener {
             }
         }
 
-        // ---------------------------
-        // Check Level Completion
-        // ---------------------------
+        // Level progression
         if (level.isComplete()) {
             game.goNextLevel();
         }

@@ -16,12 +16,10 @@ public abstract class GameLevel extends World {
 
         setGravity(9.8f);
 
-        // ground
         Shape groundShape = new BoxShape(50f, 0.5f);
         StaticBody ground = new StaticBody(this, groundShape);
         ground.setPosition(new Vec2(0f, -8.5f));
 
-        // player
         plane = new Plane(this);
         plane.setPosition(new Vec2(-10f, 2f));
         plane.addCollisionListener(new PlaneCollision(game, this));
