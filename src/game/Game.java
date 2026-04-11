@@ -26,6 +26,8 @@ public class Game {
     private int time = 0;
 
     public Game() {
+
+        // ✅ START AT LEVEL 1
         level = new Level1(this);
 
         view = new SkyView(level, 800, 500, this);
@@ -42,6 +44,7 @@ public class Game {
 
         level.start();
 
+        // ✅ TIMER FOR HUD (time display)
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -52,6 +55,7 @@ public class Game {
         timer.start();
     }
 
+    // ✅ LEVEL SWITCHING
     public void goNextLevel() {
         GameLevel next = level.getNextLevel();
 
@@ -64,14 +68,17 @@ public class Game {
         frame.removeKeyListener(frame.getKeyListeners()[0]);
 
         level = next;
+
         view.setWorld(level);
         view.updateBackground(level.getBackgroundFile());
 
         frame.addKeyListener(new PlaneController(level.getPlane()));
+
         level.start();
         view.repaint();
     }
 
+    // ✅ GAME OVER
     public void showGameOver() {
         JOptionPane.showMessageDialog(frame, "GAME OVER");
         System.exit(0);
@@ -85,6 +92,7 @@ public class Game {
         return time;
     }
 
+    // ✅ RANDOM HEIGHT FOR OBJECTS
     public static float randomY() {
         return MIN_Y + RNG.nextFloat() * (MAX_Y - MIN_Y);
     }

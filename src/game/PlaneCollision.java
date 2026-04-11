@@ -20,35 +20,28 @@ public class PlaneCollision implements CollisionListener {
         if (e.getOtherBody() instanceof Ring ring) {
             Game.score++;
             ring.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
-
-            if (level.isComplete()) {
-                game.goNextLevel();
-            }
-            return;
         }
-
-        if (e.getOtherBody() instanceof Bird bird) {
+        else if (e.getOtherBody() instanceof Bird bird) {
             Game.lives--;
-
             bird.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
-            bird.setLinearVelocity(new Vec2(-Game.SCROLL_SPEED, 0));
 
             if (Game.lives <= 0) {
                 game.showGameOver();
                 return;
             }
-            return;
         }
-
-        if (e.getOtherBody() instanceof Spike spike) {
+        else if (e.getOtherBody() instanceof Spike spike) {
             Game.lives--;
-
             spike.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
-            spike.setLinearVelocity(new Vec2(-Game.SCROLL_SPEED, 0));
 
             if (Game.lives <= 0) {
                 game.showGameOver();
+                return;
             }
+        }
+
+        if (level.isComplete()) {
+            game.goNextLevel();
         }
     }
 }
