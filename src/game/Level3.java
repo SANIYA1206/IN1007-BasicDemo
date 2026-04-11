@@ -33,12 +33,6 @@ public class Level3 extends GameLevel {
         Bird bird4 = new Bird(this);
         bird4.setPosition(new Vec2(26f, 3f));
 
-        LaserBarrier laser1 = new LaserBarrier(this);
-        laser1.setPosition(new Vec2(18f, 2f));
-
-        LaserBarrier laser2 = new LaserBarrier(this);
-        laser2.setPosition(new Vec2(24f, 5f));
-
         new RingOscillator(ring1);
         new RingOscillator(ring2);
 
@@ -49,8 +43,9 @@ public class Level3 extends GameLevel {
         addStepListener(new Scroller(plane, bird2, false));
         addStepListener(new Scroller(plane, bird3, false));
         addStepListener(new Scroller(plane, bird4, false));
-        addStepListener(new Scroller(plane, laser1, false));
-        addStepListener(new Scroller(plane, laser2, false));
+
+        new LaserShooter(this, 30f, 2f);
+        new LaserShooter(this, 30f, 5f);
     }
 
     @Override

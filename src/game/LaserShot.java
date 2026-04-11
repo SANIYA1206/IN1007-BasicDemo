@@ -10,7 +10,7 @@ public class LaserShot extends DynamicBody {
 
     public LaserShot(World world) {
         super(world, new BoxShape(2.5f, 0.15f));
-        addImage(new BodyImage("data/laser_horizontal.png", 5f));
+        addImage(new BodyImage("data/laser.png", 5f));
         setGravityScale(0);
     }
 

@@ -17,15 +17,14 @@ public class PlaneCollision implements CollisionListener {
     @Override
     public void collide(CollisionEvent e) {
 
-        // Collect ring
         if (e.getOtherBody() instanceof Ring ring) {
             Game.score++;
             ring.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
         }
 
-        // Hit bird
         if (e.getOtherBody() instanceof Bird bird) {
             Game.lives--;
+
             bird.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
             bird.setLinearVelocity(new Vec2(-Game.SCROLL_SPEED, 0));
 
@@ -35,9 +34,9 @@ public class PlaneCollision implements CollisionListener {
             }
         }
 
-        // Hit spike
         if (e.getOtherBody() instanceof Spike spike) {
             Game.lives--;
+
             spike.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
             spike.setLinearVelocity(new Vec2(-Game.SCROLL_SPEED, 0));
 
@@ -47,11 +46,9 @@ public class PlaneCollision implements CollisionListener {
             }
         }
 
-        // Hit horizontal laser
-        if (e.getOtherBody() instanceof LaserBarrier laser) {
+        if (e.getOtherBody() instanceof LaserShot shot) {
             Game.lives--;
-            laser.setPosition(new Vec2(Game.RESPAWN_X, Game.randomY()));
-            laser.setLinearVelocity(new Vec2(-Game.SCROLL_SPEED, 0));
+            shot.destroy();
 
             if (Game.lives <= 0) {
                 game.showGameOver();
@@ -59,7 +56,6 @@ public class PlaneCollision implements CollisionListener {
             }
         }
 
-        // Level progression
         if (level.isComplete()) {
             game.goNextLevel();
         }
