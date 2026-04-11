@@ -22,7 +22,7 @@ public class LaserBarrier extends StaticBody {
         // Make the laser a sensor so the plane can pass through
         // but still trigger collision events
         for (Fixture fixture : getFixtures()) {
-            fixture.setSensor(true);
+            //fixture.setSensor(true);
         }
     }
 }
