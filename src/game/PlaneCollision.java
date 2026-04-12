@@ -56,6 +56,11 @@ public class PlaneCollision implements CollisionListener {
             }
         }
 
+        if (e.getOtherBody() instanceof Ground) {
+            game.showGameOver();
+            return;
+        }
+
         if (level.isComplete()) {
             game.goNextLevel();
         }
