@@ -7,8 +7,13 @@ public class FireballCollision implements CollisionListener {
 
     @Override
     public void collide(CollisionEvent e) {
-        if (e.getOtherBody() instanceof LaserShot shot) {
-            shot.destroy();
+
+        // Check if the fireball hits a LaserShot
+        if (e.getOtherBody() instanceof LaserShot) {
+            // Destroy ONLY the laser that was hit
+            e.getOtherBody().destroy();
+
+            // Destroy the fireball after impact
             e.getReportingBody().destroy();
         }
     }

@@ -9,8 +9,9 @@ import org.jbox2d.common.Vec2;
 public class LaserShot extends DynamicBody {
 
     public LaserShot(World world) {
-        super(world, new BoxShape(2.5f, 0.15f));
-        addImage(new BodyImage("data/laser.png", 5f));
+        // Shorter and slightly thicker hitbox for reliable collisions
+        super(world, new BoxShape(1.5f, 0.2f));
+        addImage(new BodyImage("data/laser.png", 3f));
         setGravityScale(0);
     }
 
